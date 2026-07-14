@@ -1,20 +1,35 @@
-# Spec-First AGENTS.md
+# Spec-First AGENTS.md Notes
 
-A minimal, reusable `AGENTS.md` for specification-first AI-assisted software development.
+A small `AGENTS.md` ruleset I use for specification-first AI-assisted development.
 
-The rules constrain coding agents to:
+It focuses on:
 
 * EARS acceptance criteria
-* specification-first development
+* specification-first changes
+* tests derived from observable behaviour
 * API and contract verification
 * generated-code protection
-* minimal-change discipline
+* minimal, task-scoped changes
 
-Primary concept: define observable behaviour with EARS, derive tests from those acceptance criteria, then implement the minimum compliant change.
+These are working notes derived from recurring issues encountered while using coding agents. They are not a validated development standard.
+
+## Core idea
+
+Define observable behaviour using EARS, derive tests from those acceptance criteria, and implement the minimum change required to satisfy them.
+
+```text
+Specification
+      ↓
+Acceptance criteria
+      ↓
+Tests
+      ↓
+Implementation
+```
 
 ## Usage
 
-Copy `AGENTS.md` into the root of your repository:
+Copy `AGENTS.md` into the root of a repository and add project-specific context where required.
 
 ```text
 your-project/
@@ -23,7 +38,14 @@ your-project/
 └── src/
 ```
 
-Then add project-specific rules in a repository-specific section.
+Repository-specific additions may include:
+
+* specification locations
+* generated-code paths
+* authoritative API contracts
+* verification commands
+* known broken states
+* intentional behaviour that agents may otherwise “fix”
 
 Example:
 
@@ -42,8 +64,6 @@ Files under `src/generated/` are generated from `openapi.yaml` and SHALL NOT be 
 
 ### Verification
 
-Run:
-
 ```sh
 npm run lint
 npm run typecheck
@@ -51,23 +71,23 @@ npm test
 ```
 ````
 
-## Core workflow
+## Workflow
 
 For non-trivial behavioural changes:
 
 ```text
-Read specification
+Read the existing specification
         ↓
-Update or create specification
+Update or create the specification
         ↓
-Derive tests from acceptance criteria
+Derive tests from the acceptance criteria
         ↓
-Implement minimum change
+Implement the minimum compliant change
         ↓
-Include specification + tests + implementation together
+Submit specification, tests, and implementation together
 ```
 
-IF an Issue or task conflicts with an existing specification, resolve the source of truth before implementing.
+When an Issue or task conflicts with an existing specification, the source-of-truth conflict should be resolved before implementation.
 
 ## EARS examples
 
@@ -86,7 +106,7 @@ IF the server rejects the request THEN THE System SHALL preserve the entered for
 State-driven:
 
 ```text
-WHILE the upload is in progress THE System SHALL prevent a second upload submission.
+WHILE the upload is in progress THE System SHALL prevent another upload submission.
 ```
 
 Complex:
@@ -95,7 +115,7 @@ Complex:
 WHILE the user is authenticated, WHEN the session expires, THE System SHALL request re-authentication.
 ```
 
-Acceptance criteria describe externally observable behaviour. They SHALL NOT prescribe internal implementation steps.
+Acceptance criteria describe externally observable behaviour rather than implementation steps.
 
 Avoid:
 
@@ -109,44 +129,13 @@ Prefer:
 WHEN the user submits a valid form THE System SHALL store the submitted data.
 ```
 
-## Recommended customisation
-
-Keep reusable rules in the common sections. Add repository-specific information for:
-
-* specification locations
-* generated-code paths
-* authoritative API contracts
-* verification commands
-
-Project-specific exceptions SHOULD be explicit so agents do not “fix” intentional behaviour.
-
 ## Scope
 
 This repository contains development instructions only.
 
-It does not provide:
+It does not provide a specification framework, test runner, coding agent, OpenAPI generator, or CI configuration.
 
-* a coding agent
-* a specification framework
-* a test runner
-* an OpenAPI generator
-* CI configuration
-* project-specific architecture rules
-
-Copy and adapt `AGENTS.md` for the repository where it is used.
-
-## Contributing
-
-Changes SHOULD remain broadly reusable and SHOULD preserve the minimal, EARS-focused scope.
-
-Repository-specific rules, product names, endpoints, credentials, application paths, and implementation details SHOULD NOT be added to the shared `AGENTS.md`.
-
-Proposed changes SHOULD explain:
-
-1. the agent failure mode being prevented
-2. why the rule is generally applicable
-3. whether the rule overlaps with an existing section
-4. the smallest wording change needed
+The rules are intentionally small and are expected to change as they are used in real projects.
 
 ## Licence
 
